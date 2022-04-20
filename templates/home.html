@@ -5,7 +5,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <main>
-    <button type="button" class=" hover:bg-gray-900 hover:text-white text-gray-400 w-40 h-10 float-right bg-gradient-to-r bg-gray-800 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800  rounded-full   text-center mr-72 mb-2 -mt-10">Add Question</button>
+    <button type="button"  onclick="location.href='{% url 'add-question' %}'" class=" hover:bg-gray-900 hover:text-white text-gray-400 w-40 h-10 float-right bg-gradient-to-r bg-gray-800 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800  rounded-full   text-center mr-72 mb-2 -mt-10">Add Question</button>
     <div
         class="max-w-sm rounded-md overflow-hidden h-96 w-48 mt-20 mx-5 border-r border-b border-l border-t border-gray-400 ">
 
@@ -94,7 +94,7 @@
             <div
                 class="border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 w-3/4">
 
-                <a href="/qna.html">
+                <a href="{% url 'qna' question.id %}">
 
                     <div class="mb-8">
                         <p class="text-sm text-gray-600 flex items-center">
@@ -116,7 +116,7 @@
                     <img class="w-8 h-8 rounded-full mr-4" src="/media/images/index.png" alt="pic">
                     <div class="text-sm">
                         <p class="text-gray-900 leading-none">{{ question.author.username }}</p>
-                        <p class="text-gray-600">Aug 18</p>
+                        <p class="text-gray-600">{{ question.date_posted|date:"F d, Y" }}</p>
                     </div>
                     <div>
                         <!--Upvote button-->
