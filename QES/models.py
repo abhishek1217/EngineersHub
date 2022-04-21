@@ -8,7 +8,7 @@ class Questions(models.Model):
     title = models.TextField()
     content = models.TextField()
     category = models.CharField(max_length=255)
-    upvotes = models.IntegerField(null=True)
+    upvotes = models.ManyToManyField(User,related_name="qes_questions")
     downvotes = models.IntegerField(null=True)
     date_posted = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
