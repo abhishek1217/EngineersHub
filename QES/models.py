@@ -8,29 +8,33 @@ class Questions(models.Model):
     title = models.TextField()
     content = models.TextField()
     category = models.CharField(max_length=255)
-    upvotes = models.ManyToManyField(User,related_name="qes_questions")
-    downvotes = models.IntegerField(null=True)
+    upvotes = models.ManyToManyField(User,related_name="upvotes")
+    # downvotes = models.IntegerField(null=True)
     date_posted = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.title
+        return "Question " + str(self.id)
 
     def get_absolute_url(self):
         return reverse("qna", kwargs={"pk": self.pk})
+    
+    def total_upvotes(self):
+        return self.upvotes.count()
     
 
 
 class Answers(models.Model):
     answer = models.TextField()
-    upvotes = models.IntegerField(null=True)
-    downvotes = models.IntegerField(null=True)
+    ans_upvotes = models.ManyToManyField(User,related_name="ans_upvotes")
+    # downvotes = models.IntegerField(null=True)
     date_posted = models.DateTimeField(auto_now_add=True)
     question = models.ForeignKey(Questions, on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.answer
+        return "Answer " + str(self.id)
+
     
     
 
