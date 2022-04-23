@@ -11,29 +11,6 @@ from django.urls import reverse
 #         "questions" : Questions.objects.all()
 #     }
 #     return render(request,'home.html',context)
-
-def UpvoteQuest(request,pk):
-        quest = get_object_or_404(Questions, id=request.POST.get('question_id'))
-        liked = False
-        if quest.upvotes.filter(id=request.user.id).exists():
-            quest.upvotes.remove(request.user)
-            upvoted = False
-        else:
-            quest.upvotes.add(request.user)
-            upvoted=True
-        return HttpResponseRedirect(reverse('qna',args=[str(pk)]))
-
-def UpvoteQuest2(request,pk):
-        quest = get_object_or_404(Questions, id=request.POST.get('question_id'))
-        liked = False
-        if quest.upvotes.filter(id=request.user.id).exists():
-            quest.upvotes.remove(request.user)
-            upvoted = False
-        else:
-            quest.upvotes.add(request.user)
-            upvoted=True
-        return HttpResponseRedirect(reverse('home'))
-
 class QuestionsListView(ListView):
     model = Questions
     template_name = 'home.html' # <app>/<model>_<viewtype>.html
