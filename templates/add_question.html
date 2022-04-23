@@ -1,26 +1,30 @@
-{% load tailwind_tags%}
+{% extends 'base.html'%}
 {% load crispy_forms_tags %}
+{% block content%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% tailwind_css%}
+    <style>
+        input {max-height: 50em};
+    </style>
     <title>Add Question</title>
 </head>
 <body>
-    <div class="container">
-        <form method="POST">
+    <div>
+        <form class="rounded-md pl-5 pr-5 pt-10 border-l border-r border-t border-b border-gray-300 overflow-hidden shadow-xl mt-16 mx-60 pb-10" method="POST">
             {% csrf_token %}
             <fieldset class="form-group">
-                <legend>Add New Question</legend>
+                <legend class="font-bold pb-5">Add New Question</legend>
                 {{ form|crispy }}
             </fieldset>
             <div class="form-group">
-                <button type="submit">Add</button>
+                <button class="hover:bg-gray-900 hover:text-white text-gray-400 w-40 h-10  bg-gradient-to-r bg-gray-800 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 rounded-full text-center" type="submit">Add</button>
             </div>
         </form>
     </div>
 </body>
 </html>
+{% endblock content%}

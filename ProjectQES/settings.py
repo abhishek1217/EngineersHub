@@ -92,7 +92,7 @@ WSGI_APPLICATION = 'ProjectQES.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'sample',
+        'NAME': 'QES',
         'USER': 'root',
         'PASSWORD': 'abhi1234',
         'HOST': 'localhost',

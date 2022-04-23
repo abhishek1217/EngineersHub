@@ -1,24 +1,21 @@
 {% extends 'base.html'%}
 {% load crispy_forms_tags %}
 {% block content%}
-<div class="content-section">
-  <div class="media">
-    <img class="rounded-circle account-img" style="width:50px; height:50px;" src="{{ user.profile.profile_pic.url }}">
-    <div class="media-body">
-      <h2 class="account-heading">{{ user.username }}</h2>
-      <p class="text-secondary">{{ user.email }}</p>
-    </div>
-  </div>
+<style>
+  input {max-width: 25em};
+</style>
+<div class="w-1/2 mt-10 mx-80 pb-10 pt-10 rounded-md border-r border-b border-l border-t border-gray-300 shadow-xl overflow-hidden content-section flex items-center justify-center">
     <form method="POST" enctype = "multipart/form-data">
       {% csrf_token %}
       <fieldset class="form-group">
-          <legend class="border-bottom mb-4">Profile Info</legend>
+          <legend class="border-bottom mb-4 font-extrabold">Profile Info</legend>
           {{ u_form|crispy }}
           {{ p_form|crispy }}
       </fieldset>
       <div class="form-group">
-          <button class="btn btn-outline-info" type="submit">Update</button>
+          <button class="btn btn-outline-info  hover:bg-gray-900 hover:text-white text-gray-400 w-40 h-10  bg-gradient-to-r bg-gray-800 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 rounded-full text-center" type="submit">Update</button>
       </div>
   </form>
 </div>
+
 {% endblock content%}

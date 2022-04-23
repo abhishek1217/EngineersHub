@@ -1,10 +1,11 @@
-from django.shortcuts import render, HttpResponse, get_object_or_404
+from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView,DetailView,CreateView,UpdateView
-from . models import Questions,Answers
+from .models import Questions,Answers
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 
 # def home(request):
 #     context = {
@@ -20,20 +21,53 @@ class QuestionsListView(ListView):
     
     # Remember to give ordering based on the upvotes.
 
+@login_required
+def upvoting(request):
+    user = request.user
+    if request.method == 'POST':
+        quest_id = request.POST.get('quest_id')
+        quest = get_object_or_404(Questions,id=quest_id)
+        print(quest_id)
+        print(quest)
+        quest.upvotes.add(request.user)
+        print("upvote added")
+        result = quest.total_upvotes()
+        print("Result = ",result)
+        quest.save()
+        return JsonResponse({'result': result,})
+    return redirect('home')
+
+@login_required
+def downvoting(request):
+    user = request.user
+    if request.method == 'POST':
+        quest_id = request.POST.get('quest_id')
+        quest = get_object_or_404(Questions, id=quest_id)
+        print(quest_id)
+        print(quest)
+        quest.upvotes.remove(request.user)
+        quest.save()
+        print("upvote removed")
+        result = quest.total_upvotes()
+        print("Result = ",result)
+        return JsonResponse({'result': result,})
+    return redirect('home')
+
+
 class QuestionsDetailView(DetailView):
     model = Questions
     template_name = 'qna.html'
     def get_context_data(self, **kwargs):
         context = super(QuestionsDetailView, self).get_context_data(**kwargs)
         grab = get_object_or_404(Questions, id=self.kwargs['pk'])
-        upvoted = False
+        # upvoted = False
 
-        if grab.upvotes.filter(id = self.request.user.id).exists():
-            upvoted=True
+        # if grab.upvotes.filter(id = self.request.user.id).exists():
+        #     upvoted=True
         total_upvotes = grab.total_upvotes()
         context["total_upvotes"] =  total_upvotes
         context["answers"] = Answers.objects.all()
-        context["upvoted"] = upvoted
+        # context["upvoted"] = upvoted
         return context
     
     
@@ -62,5 +96,7 @@ class QuestionsUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         if self.request.user == question.author:
             return True
         return False
+
+
 # def qna(request):
 #     return render(request,'qna.html')

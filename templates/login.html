@@ -1,4 +1,3 @@
-{% load tailwind_tags%}
 {% load crispy_forms_tags %}
 <!DOCTYPE html>
 <html lang="en">
@@ -6,28 +5,42 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% tailwind_css%}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        input {max-width: 14em};
+    </style>
     <title>Login</title>
 </head>
 <body>
-    <div class="container">
-        <form method="POST">
-            {% csrf_token %}
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Login</legend>
-                {{ form|crispy }}
-            </fieldset>
-            <br>
-            <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Login</button>
+    <center><div
+        class="mt-40 w-1/2 max-w-sm rounded-md overflow-hidden h-96 mx-5 border-r border-b border-l border-t border-gray-300 shadow-xl ">
+
+        <div class="w-25 px-6 pt-4 pb-2">
+            <form method="POST">
+                {% csrf_token %}
+                <fieldset class="form-group mt- items-center justify-center">
+                    <center><legend class="font-bold border-bottom mb-4">Login</legend></center>
+                </fieldset>
+                <br/>
+                <center><div class="mx-10">{{ form|crispy  }}</div></center>
+                <br>
+                <center><div class="form-group mx-10">
+                    <button class=" hover:bg-gray-900 hover:text-white text-gray-400 w-40 h-10  bg-gradient-to-r bg-gray-800 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800  rounded-full   text-center" type="submit">Login</button>
+                </div>
+                </center>
+            </form>
             </div>
-        </form>
-        <div class="border-top pt-3">
-            <small class="text-muted">
-                Need An Account? <a class="ml-2" href="{% url 'register' %}"><br>Sign Up</a>
-            </small>
+            <center><div class="border-top pt-3">
+                <small class="text-muted">
+                    Need An Account? <a  href="{% url 'register' %}"><br>Sign Up</a>
+                </small>
+            </div>
+            </center>
         </div>
-    </div>
+    </div></center>
+    
+    
+   
 
 </body>
 </html>
