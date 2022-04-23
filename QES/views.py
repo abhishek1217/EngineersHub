@@ -75,7 +75,7 @@ class QuestionsDetailView(DetailView):
 
 class QuestionsCreateView(LoginRequiredMixin, CreateView):
     model = Questions
-    fields = ['title','content','category']
+    fields = ['title','content','category','quest_image']
     template_name = 'add_question.html'
 
     def form_valid(self, form):
