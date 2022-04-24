@@ -42,7 +42,7 @@
         <span
             class="inline-block bg-gray-200 rounded-md px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">4. Any use of profanity will not be tolerated</span>
         <span
-            class="inline-block bg-gray-200 rounded-md px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">5. You must earn repution before upvoting posts</span>
+            class="inline-block bg-gray-200 rounded-md px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">5. You must earn reputation before upvoting posts</span>
         </div>
       </div>
     <!-- <a href="/qna.html"> -->
@@ -53,7 +53,7 @@
 
         <div class="pb-80 lg:max-w-full lg:flex justify-center mx-56 -mt-96">
             <div class="lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"
-                style="background-image: url('media/images/test.png')" title="Mountain">
+                style="background-image: url(/media/{{question.quest_image}})" title="Mountain">
             </div>
             <div
                 class="border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 w-3/4">
@@ -77,7 +77,7 @@
                     </div>
                 </a>
                 <div class="flex items-center">
-                    <img class="w-8 h-8 rounded-full mr-4" src="/media/images/index.png" alt="pic">
+                    <img class="w-8 h-8 rounded-full mr-4" src="{{ question.author.profile.profile_pic.url }}" alt="pic">
                     <div class="text-sm">
                         <p class="text-gray-900 leading-none">{{ question.author.username }}</p>
                         <p class="text-gray-600">{{ question.date_posted|date:"F d, Y" }}</p>
@@ -131,7 +131,7 @@
                         </a>
                         {% endif %}
                         <!--Comment-->
-                        <button class="mx-10">
+                        <button class="mx-10" onclick="location.href='{% url 'qna' question.id %}'">
                             <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                                 <!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com/ License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
                                 <path
