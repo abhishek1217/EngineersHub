@@ -175,17 +175,16 @@
           </div>
           <hr class="border-gray-400">
           <div>
-            <form class="rounded-md pl-5 pr-5 pt-10 border-l border-r border-t border-b border-gray-300 overflow-hidden shadow-xl mt-16 mx-60 pb-10" method="POST">
-                {% csrf_token %}
-                <fieldset class="form-group">
-                    <legend class="font-bold pb-5">Add Answer</legend>
-                    {{ form|crispy }}
-                </fieldset>
-                <div class="form-group">
-                    <button class="hover:bg-gray-900 hover:text-white text-gray-400 w-40 h-10  bg-gradient-to-r bg-gray-800 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 rounded-full text-center" type="submit">Add</button>
-                </div>
+            <form action="{% url 'post-answer'%}" method="post">
+
+              {% csrf_token %}
+      
+              <label>Answer: </label>
+              <textarea type="text" name="answer_content"></textarea>
+              <input type="hidden" name = "questionid" value="{{ object.id }}">
+              <button class="hover:bg-gray-900 hover:text-white text-gray-400 w-40 h-10  bg-gradient-to-r bg-gray-800 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 rounded-full text-center" type="submit">Add</button>
             </form>
-        </div>
+          </div>
         {% for answer in answers  %}
           <div class="p-10 content-center justify-center">
             <!--Comment Cards 1-->
@@ -199,7 +198,7 @@
                 <div class="flex items-center">
                   <img class="w-8 h-8 rounded-full mr-4" src="/media/images/index.png" alt="pic">
                   <div class="text-sm">
-                    <p class="text-gray-900 leading-none">{{ answer.user.username }}</p>
+                    <p class="text-gray-900 leading-none">{{ answer.author.username }}</p>
                     <p class="text-gray-600">{{ answer.date_posted }}</p>
                   </div>
                   <div>

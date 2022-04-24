@@ -66,7 +66,7 @@ class QuestionsDetailView(DetailView):
         #     upvoted=True
         total_upvotes = grab.total_upvotes()
         context["total_upvotes"] =  total_upvotes
-        context["answers"] = Answers.objects.all()
+        context["answers"] = Answers.objects.filter(question_id=grab.id)
         # context["upvoted"] = upvoted
         return context
     
@@ -97,6 +97,20 @@ class QuestionsUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             return True
         return False
 
+def PostAnswers(request):
+    if request.method == 'POST':
+        userid = request.user.id
+        answer = request.POST['answer_content']
+        quest_id = request.POST.get('questionid')
+        print(answer)
+        print("Hello")
+        print(quest_id)
+        Answers.objects.create(answer = answer,question_id = quest_id,author_id = userid)
+        # return redirect('QES:qna')
+        return redirect(f'qna/{quest_id}')
+    else:
+        return render(request, 'qna.html')
 
 # def qna(request):
 #     return render(request,'qna.html')
+
