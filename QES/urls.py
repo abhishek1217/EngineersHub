@@ -10,7 +10,11 @@ urlpatterns = [
     path('qna/<int:pk>/update',QuestionsUpdateView.as_view(),name="question-update"),
     path('qna/add/',QuestionsCreateView.as_view(),name="add-question"),
     path('upvoted/', views.upvoting, name='upvoted-question'),
+    path('upvotedans/', views.upvotingans, name='upvoted-answer'),
+
     path('downvoted/', views.downvoting, name='downvoted-question'),
+    path('downvotedans/', views.downvotingans, name='downvoted-answer'),
+
     path('postanswer/', views.PostAnswers, name='post-answer'),
     path('viewprofile/', views.viewprofile,name='viewprofile')
     # path('qna/',views.qna,name="qna"),

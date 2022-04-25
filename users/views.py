@@ -1,7 +1,8 @@
 from django.shortcuts import render,redirect
 from django.contrib import messages
 from django.contrib.auth import logout
-from QES.models import Questions
+from QES.models import Questions,Answers
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm,UserUpdateForm,ProfileUpdateForm
 
@@ -40,6 +41,9 @@ def profile(request):
 def logout_view(request):
     logout(request)
     Questions.objects.all().update(downvoted='False')
+    Answers.objects.all().update(downvoted='False')
+    rep = Questions.totalvotes + Answers.totalvotes
+    User.profile.reputation.update(reputation=rep)
     return redirect('home')
 
 

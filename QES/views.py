@@ -44,6 +44,28 @@ def upvoting(request):
         return JsonResponse({'result' : result,})
 
 @login_required
+def upvotingans(request):
+    if request.method == 'POST':
+        ans_id = request.POST.get('ans_id')
+        answer = get_object_or_404(Answers, id=ans_id)
+        print(ans_id)
+        user_id = request.user.id
+        print(answer.answer)
+        print("User id= ",user_id)
+        if not answer.ans_upvotes.filter(id=user_id).exists():
+            if answer.downvoted == 'False':
+                answer.ans_upvotes.add(request.user)
+                answer.totalvotes += 1
+            else:
+                answer.ans_upvotes.add(request.user)
+                answer.totalvotes += 1
+                answer.downvoted = 'False'
+            answer.save()
+        result = answer.totalvotes
+        return JsonResponse({'result' : result,})
+
+
+@login_required
 def downvoting(request):
     if request.method == 'POST':
         quest_id = request.POST.get('q_id')
@@ -66,6 +88,31 @@ def downvoting(request):
                 quest.downvoted = 'True'
                 quest.save()
         result = quest.totalvotes
+        return JsonResponse({'result' : result, })
+
+@login_required
+def downvotingans(request):
+    if request.method == 'POST':
+        ans_id = request.POST.get('a_id')
+        answer = get_object_or_404(Answers, id=ans_id)
+        print(ans_id)
+        print(answer.answer)
+        user_id = request.user.id
+        print("User id= ",user_id)
+        if answer.ans_upvotes.filter(id=user_id).exists():
+            print('Here')
+            answer.ans_upvotes.remove(request.user)
+            answer.totalvotes -= 1
+            answer.downvoted = 'True'
+            answer.save()
+        else:
+            print('Here 2')
+            if answer.downvoted == 'False':
+                print('Here 3')
+                answer.totalvotes -= 1
+                answer.downvoted = 'True'
+                answer.save()
+        result = answer.totalvotes
         return JsonResponse({'result' : result, })
 
 class QuestionsDetailView(DetailView):
