@@ -20,7 +20,7 @@ class QuestionsListView(ListView):
 
     
 def viewprofile(request):
-     return render(request, 'view-profile.html')
+     return render(request, 'viewprofile.html')
 
 @login_required
 def upvoting(request):
