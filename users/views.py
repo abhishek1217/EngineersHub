@@ -1,5 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib import messages
+from django.contrib.auth import logout
+from QES.models import Questions
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm,UserUpdateForm,ProfileUpdateForm
 
@@ -35,6 +37,10 @@ def profile(request):
     }
     return render(request,'profile.html', context)
 
+def logout_view(request):
+    logout(request)
+    Questions.objects.all().update(downvoted='False')
+    return redirect('home')
 
 
 #Use this for sending messages after POST

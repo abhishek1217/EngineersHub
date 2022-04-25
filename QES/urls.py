@@ -12,6 +12,7 @@ urlpatterns = [
     path('upvoted/', views.upvoting, name='upvoted-question'),
     path('downvoted/', views.downvoting, name='downvoted-question'),
     path('postanswer/', views.PostAnswers, name='post-answer'),
+    path('viewprofile/', views.viewprofile,name='viewprofile')
     # path('qna/',views.qna,name="qna"),
 ]
 

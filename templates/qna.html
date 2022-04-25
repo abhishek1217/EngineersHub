@@ -130,7 +130,7 @@
 
                         </button>
                     </form>
-                        <span class="font-bold items-center upvote-count{{ object.id }}">{{ object.upvotes.count }}</span>
+                        <span class="font-bold items-center upvote-count{{ object.id }}">{{ object.totalvotes }}</span>
                         <!--Downvote button-->
                     <form action="{% url 'downvoted-question' %}" method="post" class="downvote-form" id = "{{ object.id }}">
                         {% csrf_token %}
@@ -244,7 +244,7 @@
           url: url,
           data: {
               'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
-              'quest_id':quest_id,
+              'q_id':quest_id,
           },
           success: function(json) {
           console.log(json)

@@ -19,40 +19,54 @@ class QuestionsListView(ListView):
     ordering = ['-date_posted']
 
     
-    # Remember to give ordering based on the upvotes.
+def viewprofile(request):
+     return render(request, 'view-profile.html')
 
 @login_required
 def upvoting(request):
-    user = request.user
-    if request.method == 'POST':
-        quest_id = request.POST.get('quest_id')
-        quest = get_object_or_404(Questions,id=quest_id)
-        print(quest_id)
-        print(quest)
-        quest.upvotes.add(request.user)
-        print("upvote added")
-        result = quest.total_upvotes()
-        print("Result = ",result)
-        quest.save()
-        return JsonResponse({'result': result,})
-    return redirect('home')
-
-@login_required
-def downvoting(request):
-    user = request.user
     if request.method == 'POST':
         quest_id = request.POST.get('quest_id')
         quest = get_object_or_404(Questions, id=quest_id)
         print(quest_id)
-        print(quest)
-        quest.upvotes.remove(request.user)
-        quest.save()
-        print("upvote removed")
-        result = quest.total_upvotes()
-        print("Result = ",result)
-        return JsonResponse({'result': result,})
-    return redirect('home')
+        user_id = request.user.id
+        print(quest.title)
+        print("User id= ",user_id)
+        if not quest.upvotes.filter(id=user_id).exists():
+            if quest.downvoted == 'False':
+                quest.upvotes.add(request.user)
+                quest.totalvotes += 1
+            else:
+                quest.upvotes.add(request.user)
+                quest.totalvotes += 1
+                quest.downvoted = 'False'
+            quest.save()
+        result = quest.totalvotes
+        return JsonResponse({'result' : result,})
 
+@login_required
+def downvoting(request):
+    if request.method == 'POST':
+        quest_id = request.POST.get('q_id')
+        quest = get_object_or_404(Questions, id=quest_id)
+        print(quest_id)
+        print(quest.title)
+        user_id = request.user.id
+        print("User id= ",user_id)
+        if quest.upvotes.filter(id=user_id).exists():
+            print('Here')
+            quest.upvotes.remove(request.user)
+            quest.totalvotes -= 1
+            quest.downvoted = 'True'
+            quest.save()
+        else:
+            print('Here 2')
+            if quest.downvoted == 'False':
+                print('Here 3')
+                quest.totalvotes -= 1
+                quest.downvoted = 'True'
+                quest.save()
+        result = quest.totalvotes
+        return JsonResponse({'result' : result, })
 
 class QuestionsDetailView(DetailView):
     model = Questions
@@ -64,8 +78,8 @@ class QuestionsDetailView(DetailView):
 
         # if grab.upvotes.filter(id = self.request.user.id).exists():
         #     upvoted=True
-        total_upvotes = grab.total_upvotes()
-        context["total_upvotes"] =  total_upvotes
+        # total_upvotes = grab.total_upvotes()
+        # context["total_upvotes"] =  total_upvotes
         context["answers"] = Answers.objects.filter(question_id=grab.id)
         # context["upvoted"] = upvoted
         return context

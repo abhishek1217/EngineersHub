@@ -47,16 +47,14 @@
       </div>
     <!-- <a href="/qna.html"> -->
     {% for question in questions%}
-    <div class="p-10 content-center justify-center">
+    <div class="p-20 content-center justify-center">
         <!--Card 1-->
 
-
-        <div class="pb-80 lg:max-w-full lg:flex justify-center mx-56 -mt-96">
-            <div class="lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"
-                style="background-image: url(/media/{{question.quest_image}})" title="Mountain">
+        <div class="w-5/6 pb-72 lg:max-w-full lg:flex justify-center mx-24 -mt-96">
+            <div class="lg:w-2 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden bg-gray-700">
             </div>
             <div
-                class="border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 w-3/4">
+                class="border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 w-5/6">
 
                 <a href="{% url 'qna' question.id %}">
 
@@ -73,7 +71,7 @@
                             {{ question.category }}
                         </p>
                         <div class="text-gray-900 font-bold text-xl mb-2">{{ question.title }}</div>
-                        <p class="text-gray-700  text-base overflow-hidden">{{ question.content }}</p>
+                        <p class="w-full text-gray-700  text-base overflow-hidden whitespace-nowrap text-ellipsis">{{ question.content }}</p>
                     </div>
                 </a>
                 <div class="flex items-center">
@@ -82,10 +80,10 @@
                         <p class="text-gray-900 leading-none">{{ question.author.username }}</p>
                         <p class="text-gray-600">{{ question.date_posted|date:"F d, Y" }}</p>
                     </div>
-                    <div>
+                    <div class="inline-block">
                     {% if request.user.is_authenticated %}
                         <!--Upvote button-->
-                    <form action="{% url 'upvoted-question' %}" method="post" class="upvote-form" id="{{ question.id }}">
+                    <form action="{% url 'upvoted-question' %}" method="post" class="upvote-form inline-block pl-4" id="{{ question.id }}">
                         {% csrf_token %}
                         <input type="hidden" name = "quest_id" value = {{ question.id }}>
                         <button type = "submit" mx-10" id="upvote-button" value="{{ question.id }}">
@@ -97,17 +95,13 @@
 
                         </button>
                     </form>
-                        <span class="font-bold items-center upvote-count{{ question.id }}">{{ question.upvotes.count }}</span>
+                        <span class="absolute inline-block font-bold pl-1 upvote-count{{ question.id }}">{{ question.totalvotes }}</span>
                         <!--Downvote button-->
-                    <form action="{% url 'downvoted-question' %}" method="post" class="downvote-form" id = "{{ question.id }}">
+                    <form action="{% url 'downvoted-question' %}" method="post" class="downvote-form inline-block pl-8" id = "{{ question.id }}">
                         {% csrf_token %}
                         <input type="hidden" name = "q_id" value={{ question.id }}>
                         <button class="mx-15" id="downvote-button" value={{ question.id }}>
-                            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                <!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com/ License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
-                                <path
-                                    d="M256 0C114.6 0 0 114.6 0 256c0 141.4 114.6 256 256 256s256-114.6 256-256C512 114.6 397.4 0 256 0zM382.6 302.6l-103.1 103.1C270.7 414.6 260.9 416 256 416c-4.881 0-14.65-1.391-22.65-9.398L129.4 302.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L224 306.8V128c0-17.69 14.33-32 32-32s32 14.31 32 32v178.8l49.38-49.38c12.5-12.5 32.75-12.5 45.25 0S395.1 290.1 382.6 302.6z" />
-                            </svg>
+                            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M256 512c141.4 0 256-114.6 256-256s-114.6-256-256-256C114.6 0 0 114.6 0 256S114.6 512 256 512zM129.2 265.9C131.7 259.9 137.5 256 144 256h64V160c0-17.67 14.33-32 32-32h32c17.67 0 32 14.33 32 32v96h64c6.469 0 12.31 3.891 14.78 9.875c2.484 5.984 1.109 12.86-3.469 17.44l-112 112c-6.248 6.248-16.38 6.248-22.62 0l-112-112C128.1 278.7 126.7 271.9 129.2 265.9z"/></svg>
                         </button>
                     </form>
                         {% else %}
@@ -120,7 +114,7 @@
 
                         </a>
                         {% csrf_token %}
-                        <span class="font-bold items-center" id="upvote_count">{{ total_upvotes }}</span>
+                        <span class="inline-block font-bold" id="upvote_count">{{ question.totalvotes }}</span>
                         <!--Downvote button-->
                         <a class="mx-15" href={% url 'login' %}>
                             <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -131,7 +125,7 @@
                         </a>
                         {% endif %}
                         <!--Comment-->
-                        <button class="mx-10" onclick="location.href='{% url 'qna' question.id %}'">
+                        <button class="mx-7 inline-block" onclick="location.href='{% url 'qna' question.id %}'">
                             <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                                 <!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com/ License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
                                 <path
@@ -161,7 +155,7 @@
             url: url,
             data: {
                 'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
-                'quest_id':quest_id,
+                'q_id':quest_id,
             },
             success: function(json) {
             console.log(json)
