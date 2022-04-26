@@ -1,33 +1,21 @@
-
-
 {% extends 'base.html' %}
 {% block content %}
 <main>
-    <button type="button"  onclick="location.href='{% url 'add-question' %}'" class=" hover:bg-gray-900 hover:text-white text-gray-400 w-40 h-10 float-right bg-gradient-to-r bg-gray-800 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800  rounded-full   text-center mr-72 mb-2 -mt-10">Add Question</button>
+    <button type="button"  onclick="location.href='{% url 'add-question' %}'" class="transition ease-in-out delay-150 bg-gray-800 hover:-translate-y-1 hover:scale-110 hover:bg-gray-700 text-gray-400 duration-300 w-40 h-10 float-right rounded-full text-center mr-72 mb-2 -mt-10">Add Question</button>
     <div
-        class="max-w-sm rounded-md overflow-hidden h-96 w-48 mt-20 mx-5 border-r border-b border-l border-t border-gray-400 ">
+        class="max-w-sm rounded-md overflow-hidden h-96 w-48 mt-20 mx-5 border-r border-b border-l border-t border-gray-200 shadow-2xl">
 
         <div class="px-6 py-4">
             <div class="font-bold text-xl mb-2">Leaderboard</div>
         </div>
         <div class="px-6 pt-4 pb-2">
+            {% for profile in profiles%}
             <span
-                class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#nithish3101</span>
-            <span
-                class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#domji</span>
-            <span
-                class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#kaushik</span>
-            <span
-                class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#kaushik</span>
-            <span
-                class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#kaushik</span>
-            <span
-                class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#kaushik</span>
-            <span
-                class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#kaushik</span>
+                class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{ profile.user.username}}</span>
+            {% endfor %}
         </div>
     </div>
-    <div class="max-w-sm rounded-md overflow-scroll h-96 w-48 mx-5 -mt-96 float-right border-r border-b border-l border-t border-gray-400 ">
+    <div class="max-w-sm rounded-md h-96 w-48 mx-5 -mt-96 float-right border-r border-b border-l border-t border-gray-200 shadow-2xl ">
             
         <div class="px-6 py-4">
           <div class="font-bold text-xl mb-2 flex items-center justify-center">Rules</div>
@@ -41,8 +29,6 @@
             class="inline-block bg-gray-200 rounded-md px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">3. Do not flame bait or brigade a post</span>
         <span
             class="inline-block bg-gray-200 rounded-md px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">4. Any use of profanity will not be tolerated</span>
-        <span
-            class="inline-block bg-gray-200 rounded-md px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">5. You must earn reputation before upvoting posts</span>
         </div>
       </div>
     <!-- <a href="/qna.html"> -->
@@ -54,7 +40,7 @@
             <div class="lg:w-2 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden bg-gray-700">
             </div>
             <div
-                class="border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 w-5/6">
+                class="border-r border-b border-l border-gray-100 lg:border-l-0 lg:border-t lg:border-gray-200 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 w-5/6 shadow-2xl">
 
                 <a href="{% url 'qna' question.id %}">
 
@@ -87,7 +73,7 @@
                         {% csrf_token %}
                         <input type="hidden" name = "quest_id" value = {{ question.id }}>
                         <button type = "submit" mx-10" id="upvote-button" value="{{ question.id }}">
-                            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <svg class="w-5 h-5 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                                 <!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com/ License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
                                 <path
                                     d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256c141.4 0 256-114.6 256-256S397.4 0 256 0zM382.8 246.1C380.3 252.1 374.5 256 368 256h-64v96c0 17.67-14.33 32-32 32h-32c-17.67 0-32-14.33-32-32V256h-64C137.5 256 131.7 252.1 129.2 246.1C126.7 240.1 128.1 233.3 132.7 228.7l112-112c6.248-6.248 16.38-6.248 22.62 0l112 112C383.9 233.3 385.3 240.1 382.8 246.1z" />
@@ -101,7 +87,7 @@
                         {% csrf_token %}
                         <input type="hidden" name = "q_id" value={{ question.id }}>
                         <button class="mx-15" id="downvote-button" value={{ question.id }}>
-                            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M256 512c141.4 0 256-114.6 256-256s-114.6-256-256-256C114.6 0 0 114.6 0 256S114.6 512 256 512zM129.2 265.9C131.7 259.9 137.5 256 144 256h64V160c0-17.67 14.33-32 32-32h32c17.67 0 32 14.33 32 32v96h64c6.469 0 12.31 3.891 14.78 9.875c2.484 5.984 1.109 12.86-3.469 17.44l-112 112c-6.248 6.248-16.38 6.248-22.62 0l-112-112C128.1 278.7 126.7 271.9 129.2 265.9z"/></svg>
+                            <svg class="w-5 h-5 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M256 512c141.4 0 256-114.6 256-256s-114.6-256-256-256C114.6 0 0 114.6 0 256S114.6 512 256 512zM129.2 265.9C131.7 259.9 137.5 256 144 256h64V160c0-17.67 14.33-32 32-32h32c17.67 0 32 14.33 32 32v96h64c6.469 0 12.31 3.891 14.78 9.875c2.484 5.984 1.109 12.86-3.469 17.44l-112 112c-6.248 6.248-16.38 6.248-22.62 0l-112-112C128.1 278.7 126.7 271.9 129.2 265.9z"/></svg>
                         </button>
                     </form>
                         {% else %}
@@ -193,4 +179,3 @@
     })
 </script>
 {% endblock content %}
-

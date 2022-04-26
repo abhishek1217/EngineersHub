@@ -89,12 +89,8 @@ WSGI_APPLICATION = 'ProjectQES.wsgi.application'
 # }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'QES',
-        'USER': 'root',
-        'PASSWORD': 'abhi1234',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -141,22 +137,16 @@ MEDIA_URL = '/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
-TAILWIND_APP_NAME = 'theme'
-
-INTERNAL_IPS = [
-    '127.0.0.1',
-]
-
-NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CRISPY_TEMPLATE_PACK = "tailwind"
+
+CRISPY_TEMPLATE_PACK = "tailwind" #To render crispy tailwind forms
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'tailwind'
 
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'home' #To redirect user to Home page after Logging in
 
-LOGOUT_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'login' #To redirect user to Login page after Logging out
 
 LOGIN_URL = 'login'

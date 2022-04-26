@@ -20,7 +20,6 @@ class Questions(models.Model):
     downvoted = models.CharField(max_length=6,default='False')
     totalvotes = models.SmallIntegerField(default=0)
     date_posted = models.DateTimeField(auto_now_add=True)
-    quest_image = models.ImageField(default='test.png',upload_to='question_pics')
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 
 

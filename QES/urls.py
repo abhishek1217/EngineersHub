@@ -16,7 +16,9 @@ urlpatterns = [
     path('downvotedans/', views.downvotingans, name='downvoted-answer'),
 
     path('postanswer/', views.PostAnswers, name='post-answer'),
-    path('viewprofile/', views.viewprofile,name='viewprofile')
+    path('viewprofile/', views.viewprofile,name='viewprofile'),
+
+    path('about/',views.about,name='about')
     # path('qna/',views.qna,name="qna"),
 ]
 

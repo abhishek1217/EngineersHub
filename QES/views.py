@@ -2,35 +2,41 @@ from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView,DetailView,CreateView,UpdateView
 from .models import Questions,Answers
+from users.models import Profile
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
-# def home(request):
-#     context = {
-#         "questions" : Questions.objects.all()
-#     }
-#     return render(request,'home.html',context)
 class QuestionsListView(ListView):
     model = Questions
     template_name = 'home.html' # <app>/<model>_<viewtype>.html
     context_object_name = "questions"
     ordering = ['-date_posted']
+    def get_context_data(self, **kwargs):
+        context = super(QuestionsListView, self).get_context_data()
+        context['profiles'] = Profile.objects.all().order_by('-reputation')[:7]
+        return context
 
-    
+def about(request):
+    return render(request,'about.html')
+
 def viewprofile(request):
-     return render(request, 'viewprofile.html')
+    user_id = request.user.id
+    questions = Questions.objects.all().filter(author_id=user_id)
+    profile = get_object_or_404(Profile, id=user_id)
+    context = {
+        'questions' : questions,
+        'profile' : profile
+    }
+    return render(request, 'viewprofile.html',context)
 
 @login_required
 def upvoting(request):
     if request.method == 'POST':
         quest_id = request.POST.get('quest_id')
         quest = get_object_or_404(Questions, id=quest_id)
-        print(quest_id)
         user_id = request.user.id
-        print(quest.title)
-        print("User id= ",user_id)
         if not quest.upvotes.filter(id=user_id).exists():
             if quest.downvoted == 'False':
                 quest.upvotes.add(request.user)
@@ -48,10 +54,7 @@ def upvotingans(request):
     if request.method == 'POST':
         ans_id = request.POST.get('ans_id')
         answer = get_object_or_404(Answers, id=ans_id)
-        print(ans_id)
         user_id = request.user.id
-        print(answer.answer)
-        print("User id= ",user_id)
         if not answer.ans_upvotes.filter(id=user_id).exists():
             if answer.downvoted == 'False':
                 answer.ans_upvotes.add(request.user)
@@ -70,20 +73,14 @@ def downvoting(request):
     if request.method == 'POST':
         quest_id = request.POST.get('q_id')
         quest = get_object_or_404(Questions, id=quest_id)
-        print(quest_id)
-        print(quest.title)
         user_id = request.user.id
-        print("User id= ",user_id)
         if quest.upvotes.filter(id=user_id).exists():
-            print('Here')
             quest.upvotes.remove(request.user)
             quest.totalvotes -= 1
             quest.downvoted = 'True'
             quest.save()
         else:
-            print('Here 2')
             if quest.downvoted == 'False':
-                print('Here 3')
                 quest.totalvotes -= 1
                 quest.downvoted = 'True'
                 quest.save()
@@ -95,20 +92,14 @@ def downvotingans(request):
     if request.method == 'POST':
         ans_id = request.POST.get('a_id')
         answer = get_object_or_404(Answers, id=ans_id)
-        print(ans_id)
-        print(answer.answer)
         user_id = request.user.id
-        print("User id= ",user_id)
         if answer.ans_upvotes.filter(id=user_id).exists():
-            print('Here')
             answer.ans_upvotes.remove(request.user)
             answer.totalvotes -= 1
             answer.downvoted = 'True'
             answer.save()
         else:
-            print('Here 2')
             if answer.downvoted == 'False':
-                print('Here 3')
                 answer.totalvotes -= 1
                 answer.downvoted = 'True'
                 answer.save()
@@ -121,22 +112,14 @@ class QuestionsDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(QuestionsDetailView, self).get_context_data(**kwargs)
         grab = get_object_or_404(Questions, id=self.kwargs['pk'])
-        # upvoted = False
-
-        # if grab.upvotes.filter(id = self.request.user.id).exists():
-        #     upvoted=True
-        # total_upvotes = grab.total_upvotes()
-        # context["total_upvotes"] =  total_upvotes
-        context["answers"] = Answers.objects.filter(question_id=grab.id)
-        # context["upvoted"] = upvoted
+        context["answers"] = Answers.objects.filter(question_id=grab.id).order_by('-totalvotes')
+        context['profiles'] = Profile.objects.all().order_by('-reputation')[:7]
         return context
     
-    
-    # context["total_upvotes"] = total_upvotes
 
 class QuestionsCreateView(LoginRequiredMixin, CreateView):
     model = Questions
-    fields = ['title','content','category','quest_image']
+    fields = ['title','content','category']
     template_name = 'add_question.html'
 
     def form_valid(self, form):
@@ -145,7 +128,7 @@ class QuestionsCreateView(LoginRequiredMixin, CreateView):
 
 class QuestionsUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Questions
-    fields = ['title','content','category']
+    fields = ['title','content','category','quest_image']
     template_name = 'add_question.html'
 
     def form_valid(self, form):
@@ -158,20 +141,14 @@ class QuestionsUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             return True
         return False
 
+
 def PostAnswers(request):
     if request.method == 'POST':
         userid = request.user.id
         answer = request.POST['answer_content']
         quest_id = request.POST.get('questionid')
-        print(answer)
-        print("Hello")
-        print(quest_id)
         Answers.objects.create(answer = answer,question_id = quest_id,author_id = userid)
-        # return redirect('QES:qna')
         return redirect(f'qna/{quest_id}')
     else:
         return render(request, 'qna.html')
-
-# def qna(request):
-#     return render(request,'qna.html')
 

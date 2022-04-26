@@ -1,44 +1,28 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
-
-{% comment %} Add update button to this template, if the user opens his own POST
-{% if object.author == user %}
-  within this condition add the update button and provide a url to 'question-udpate'
-{% endif %}
-{% endcomment %}
 <main>
     <div
-      class="max-w-sm rounded-md overflow-hidden h-96 w-48 mt-20 mx-5 border-r border-b border-l border-t border-gray-400 ">
+      class="max-w-sm rounded-md overflow-hidden h-96 w-48 mt-20 mx-5 border-r border-b border-l border-t border-gray-200 shadow-2xl">
 
       <div class="px-6 py-4">
         <div class="font-bold text-xl mb-2">Leaderboard</div>
       </div>
       <div class="px-6 pt-4 pb-2">
-        <span
-          class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#nithish3101</span>
-        <span
-          class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#domji</span>
-        <span
-          class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#kaushik</span>
-        <span
-          class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#kaushik</span>
-        <span
-          class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#kaushik</span>
-        <span
-          class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#kaushik</span>
-        <span
-          class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#kaushik</span>
+        {% for profile in profiles%}
+            <span
+                class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{ profile.user.username}}</span>
+            {% endfor %}
       </div>
     </div>
     
     <div class="p-10 content-center justify-center flex flex-col flex-grow">
       <!--Card 1-->
-      <div class=" w-2/3 h-96 lg:max-w-full lg:flex justify-center mx-56 -mt-96">
+      <div class=" w-5/6 lg:max-w-full lg:flex justify-center mx-40 -mt-[422px]">
         <!-- <div class="h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden" style="background-image: url('images/test.png')" title="Mountain">
                   </div> -->
         <div
-          class="border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
+          class="border-gray-400 border-l border-r border-b lg:border-t lg:border-gray-200 bg-white rounded-b lg:rounded-b-none lg:rounded-r lg:rounded-l p-4 flex flex-col justify-between leading-normal w-5/6 shadow-2xl">
           <div class="mb-8">
             <p class="text-sm text-gray-600 flex items-center">
               <!-- <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -54,9 +38,9 @@
             <div class="text-gray-900 font-bold text-xl mb-2 flex">{{ object.title }}</div>
             <p class="text-gray-700 text-base leading-8">{{ object.content }}<br />
             </p>
-            <div class="flex items-center justify-center"><img class="w-11/12 h-96 rounded-sm"
+            <!-- <div class="flex items-center justify-center"><img class="w-11/12 h-96 rounded-sm pt-10"
                 src="{{ object.quest_image.url }}">
-            </div>
+            </div> -->
           </div>
           <div class="flex items-center mb-10">
             <img class="w-8 h-8 rounded-full mr-4" src="{{ object.author.profile.profile_pic.url }}" alt="pic">
@@ -67,11 +51,11 @@
             <div>
               {% if request.user.is_authenticated %}
                         <!--Upvote button-->
-                    <form action="{% url 'upvoted-question' %}" method="post" class="upvote-form" id="{{ object.id }}">
+                    <form action="{% url 'upvoted-question' %}" method="post" class="upvote-form inline-block pl-4" id="{{ object.id }}">
                         {% csrf_token %}
                         <input type="hidden" name = "quest_id" value = {{ object.id }}>
                         <button type = "submit" mx-10" id="upvote-button" value="{{ object.id }}">
-                            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <svg class="w-5 h-5 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                                 <!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com/ License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
                                 <path
                                     d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256c141.4 0 256-114.6 256-256S397.4 0 256 0zM382.8 246.1C380.3 252.1 374.5 256 368 256h-64v96c0 17.67-14.33 32-32 32h-32c-17.67 0-32-14.33-32-32V256h-64C137.5 256 131.7 252.1 129.2 246.1C126.7 240.1 128.1 233.3 132.7 228.7l112-112c6.248-6.248 16.38-6.248 22.62 0l112 112C383.9 233.3 385.3 240.1 382.8 246.1z" />
@@ -79,39 +63,18 @@
 
                         </button>
                     </form>
-                        <span class="font-bold items-center upvote-count{{ object.id }}">{{ object.totalvotes }}</span>
+                        <span class="absolute inline-block font-bold pl-1 items-center upvote-count{{ object.id }}">{{ object.totalvotes }}</span>
                         <!--Downvote button-->
-                    <form action="{% url 'downvoted-question' %}" method="post" class="downvote-form" id = "{{ object.id }}">
+                    <form action="{% url 'downvoted-question' %}" method="post" class="downvote-form inline-block pl-8" id = "{{ object.id }}">
                         {% csrf_token %}
                         <input type="hidden" name = "q_id" value={{ object.id }}>
                         <button class="mx-15" id="downvote-button" value={{ object.id }}>
-                            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                <!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com/ License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
-                                <path
-                                    d="M256 0C114.6 0 0 114.6 0 256c0 141.4 114.6 256 256 256s256-114.6 256-256C512 114.6 397.4 0 256 0zM382.6 302.6l-103.1 103.1C270.7 414.6 260.9 416 256 416c-4.881 0-14.65-1.391-22.65-9.398L129.4 302.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L224 306.8V128c0-17.69 14.33-32 32-32s32 14.31 32 32v178.8l49.38-49.38c12.5-12.5 32.75-12.5 45.25 0S395.1 290.1 382.6 302.6z" />
-                            </svg>
+                          <svg class="w-5 h-5 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M256 512c141.4 0 256-114.6 256-256s-114.6-256-256-256C114.6 0 0 114.6 0 256S114.6 512 256 512zM129.2 265.9C131.7 259.9 137.5 256 144 256h64V160c0-17.67 14.33-32 32-32h32c17.67 0 32 14.33 32 32v96h64c6.469 0 12.31 3.891 14.78 9.875c2.484 5.984 1.109 12.86-3.469 17.44l-112 112c-6.248 6.248-16.38 6.248-22.62 0l-112-112C128.1 278.7 126.7 271.9 129.2 265.9z"/></svg>
                         </button>
                     </form>
-                        {% else %}
-                        <a class="mx-15" href={% url 'login' %}>
-                            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                <!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com/ License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
-                                <path
-                                    d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256c141.4 0 256-114.6 256-256S397.4 0 256 0zM382.8 246.1C380.3 252.1 374.5 256 368 256h-64v96c0 17.67-14.33 32-32 32h-32c-17.67 0-32-14.33-32-32V256h-64C137.5 256 131.7 252.1 129.2 246.1C126.7 240.1 128.1 233.3 132.7 228.7l112-112c6.248-6.248 16.38-6.248 22.62 0l112 112C383.9 233.3 385.3 240.1 382.8 246.1z" />
-                            </svg>
-
-                        </a>
-                        {% csrf_token %}
-                        <span class="font-bold items-center" id="upvote_count">{{ object.upvotes.count }}</span>
-                        <!--Downvote button-->
-                        <a class="mx-15" href={% url 'login' %}>
-                            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                <!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com/ License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
-                                <path
-                                    d="M256 0C114.6 0 0 114.6 0 256c0 141.4 114.6 256 256 256s256-114.6 256-256C512 114.6 397.4 0 256 0zM382.6 302.6l-103.1 103.1C270.7 414.6 260.9 416 256 416c-4.881 0-14.65-1.391-22.65-9.398L129.4 302.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L224 306.8V128c0-17.69 14.33-32 32-32s32 14.31 32 32v178.8l49.38-49.38c12.5-12.5 32.75-12.5 45.25 0S395.1 290.1 382.6 302.6z" />
-                            </svg>
-                        </a>
-                        {% endif %}
+                        
+                        
+              {% endif %}
               <!--Comment-->
               <button class="mx-10">
                 <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -120,28 +83,34 @@
                     d="M511.1 63.1v287.1c0 35.25-28.75 63.1-64 63.1h-144l-124.9 93.68c-7.875 5.75-19.12 .0497-19.12-9.7v-83.98h-96c-35.25 0-64-28.75-64-63.1V63.1c0-35.25 28.75-63.1 64-63.1h384C483.2 0 511.1 28.75 511.1 63.1z" />
                 </svg>
               </button>
+              {% if object.author == user %}
+              <!--Update button-->
+              <button onclick="location.href='{% url 'question-update' object.id %}'" class="mx-1">
+                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com/ License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M490.3 40.4C512.2 62.27 512.2 97.73 490.3 119.6L460.3 149.7L362.3 51.72L392.4 21.66C414.3-.2135 449.7-.2135 471.6 21.66L490.3 40.4zM172.4 241.7L339.7 74.34L437.7 172.3L270.3 339.6C264.2 345.8 256.7 350.4 248.4 353.2L159.6 382.8C150.1 385.6 141.5 383.4 135 376.1C128.6 370.5 126.4 361 129.2 352.4L158.8 263.6C161.6 255.3 166.2 247.8 172.4 241.7V241.7zM192 63.1C209.7 63.1 224 78.33 224 95.1C224 113.7 209.7 127.1 192 127.1H96C78.33 127.1 64 142.3 64 159.1V416C64 433.7 78.33 448 96 448H352C369.7 448 384 433.7 384 416V319.1C384 302.3 398.3 287.1 416 287.1C433.7 287.1 448 302.3 448 319.1V416C448 469 405 512 352 512H96C42.98 512 0 469 0 416V159.1C0 106.1 42.98 63.1 96 63.1H192z"/></svg>
+              </button>
+              {% endif %}
             </div>
           </div>
           <hr class="border-gray-400">
           <div>
           {% if user.is_authenticated %}
-            <form action="{% url 'post-answer'%}" method="post">
+            <form class="pb-10 pt-5" action="{% url 'post-answer'%}" method="post">
 
               {% csrf_token %}
       
-              <label>Answer: </label>
-              <textarea type="text" name="answer_content"></textarea>
+              <span class="font-bold text-gray-800">Post Your Answer: </spans>
+              <textarea class="border-l border-r border-t border-b border-gray-300 w-full rounded-md pt-5" type="text" name="answer_content"></textarea>
               <input type="hidden" name = "questionid" value="{{ object.id }}">
               <button class="hover:bg-gray-900 hover:text-white text-gray-400 w-40 h-10  bg-gradient-to-r bg-gray-800 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 rounded-full text-center" type="submit">Add</button>
             </form>
           {% endif %}
           </div>
         {% for answer in answers  %}
-          <div class="p-10 content-center justify-center">
+          <div class="mx-10 p-5 content-center justify-center">
             <!--Comment Cards 1-->
             <div class=" w-full lg:max-w-full lg:flex justify-center -mx-10">
               <div
-                class="border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
+                class="border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal w-full">
                 <div class="mb-8">
                   <!-- <div class="text-gray-900 font-bold text-xl mb-2">Question goes here</div> -->
                   <p class="text-gray-700 text-base">{{answer.answer}}</p>
@@ -150,16 +119,16 @@
                   <img class="w-8 h-8 rounded-full mr-4" src="{{ answer.author.profile.profile_pic.url }}" alt="pic">
                   <div class="text-sm">
                     <p class="text-gray-900 leading-none">{{ answer.author.username }}</p>
-                    <p class="text-gray-600">{{ answer.date_posted }}</p>
+                    <p class="text-gray-600">{{ answer.date_posted|date:"F d, Y" }}</p>
                   </div>
                   <div>
                     {% if request.user.is_authenticated %}
                         <!--Upvote button-->
-                    <form action="{% url 'upvoted-answer' %}" method="post" class="up-form" id="{{ answer.id }}">
+                    <form action="{% url 'upvoted-answer' %}" method="post" class="up-form inline-block pl-2" id="{{ answer.id }}">
                         {% csrf_token %}
                         <input type="hidden" name = "ans_id" value = {{ answer.id }}>
                         <button type = "submit" mx-10" id="upvote-button" value="{{ answer.id }}">
-                            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <svg class="w-5 h-5 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                                 <!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com/ License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
                                 <path
                                     d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256c141.4 0 256-114.6 256-256S397.4 0 256 0zM382.8 246.1C380.3 252.1 374.5 256 368 256h-64v96c0 17.67-14.33 32-32 32h-32c-17.67 0-32-14.33-32-32V256h-64C137.5 256 131.7 252.1 129.2 246.1C126.7 240.1 128.1 233.3 132.7 228.7l112-112c6.248-6.248 16.38-6.248 22.62 0l112 112C383.9 233.3 385.3 240.1 382.8 246.1z" />
@@ -167,38 +136,17 @@
 
                         </button>
                     </form>
-                        <span class="font-bold items-center up-count{{ answer.id }}">{{ answer.totalvotes }}</span>
+                        <span class="absolute pl-4 inline-block font-bold items-center up-count{{ answer.id }}">{{ answer.totalvotes }}</span>
                         <!--Downvote button-->
-                    <form action="{% url 'downvoted-answer' %}" method="post" class="down-form" id = "{{ answer.id }}">
+                    <form action="{% url 'downvoted-answer' %}" method="post" class="down-form inline-block pl-10" id = "{{ answer.id }}">
                         {% csrf_token %}
                         <input type="hidden" name = "a_id" value={{ answer.id }}>
                         <button class="mx-15" id="downvote-button" value={{ answer.id }}>
-                            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                <!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com/ License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
-                                <path
-                                    d="M256 0C114.6 0 0 114.6 0 256c0 141.4 114.6 256 256 256s256-114.6 256-256C512 114.6 397.4 0 256 0zM382.6 302.6l-103.1 103.1C270.7 414.6 260.9 416 256 416c-4.881 0-14.65-1.391-22.65-9.398L129.4 302.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L224 306.8V128c0-17.69 14.33-32 32-32s32 14.31 32 32v178.8l49.38-49.38c12.5-12.5 32.75-12.5 45.25 0S395.1 290.1 382.6 302.6z" />
-                            </svg>
+                          <svg class="w-5 h-5 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M256 512c141.4 0 256-114.6 256-256s-114.6-256-256-256C114.6 0 0 114.6 0 256S114.6 512 256 512zM129.2 265.9C131.7 259.9 137.5 256 144 256h64V160c0-17.67 14.33-32 32-32h32c17.67 0 32 14.33 32 32v96h64c6.469 0 12.31 3.891 14.78 9.875c2.484 5.984 1.109 12.86-3.469 17.44l-112 112c-6.248 6.248-16.38 6.248-22.62 0l-112-112C128.1 278.7 126.7 271.9 129.2 265.9z"/></svg>
                         </button>
                     </form>
-                        {% else %}
-                        <a class="mx-15" href={% url 'login' %}>
-                            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                <!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com/ License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
-                                <path
-                                    d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256c141.4 0 256-114.6 256-256S397.4 0 256 0zM382.8 246.1C380.3 252.1 374.5 256 368 256h-64v96c0 17.67-14.33 32-32 32h-32c-17.67 0-32-14.33-32-32V256h-64C137.5 256 131.7 252.1 129.2 246.1C126.7 240.1 128.1 233.3 132.7 228.7l112-112c6.248-6.248 16.38-6.248 22.62 0l112 112C383.9 233.3 385.3 240.1 382.8 246.1z" />
-                            </svg>
-
-                        </a>
-                        {% csrf_token %}
-                        <span class="font-bold items-center" id="upvote_count">{{ answer.totalvotes }}</span>
-                        <!--Downvote button-->
-                        <a class="mx-15" href={% url 'login' %}>
-                            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                <!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com/ License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
-                                <path
-                                    d="M256 0C114.6 0 0 114.6 0 256c0 141.4 114.6 256 256 256s256-114.6 256-256C512 114.6 397.4 0 256 0zM382.6 302.6l-103.1 103.1C270.7 414.6 260.9 416 256 416c-4.881 0-14.65-1.391-22.65-9.398L129.4 302.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L224 306.8V128c0-17.69 14.33-32 32-32s32 14.31 32 32v178.8l49.38-49.38c12.5-12.5 32.75-12.5 45.25 0S395.1 290.1 382.6 302.6z" />
-                            </svg>
-                        </a>
+                        
+                        
                         {% endif %}
                   </div>
                 </div>

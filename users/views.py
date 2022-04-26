@@ -3,10 +3,12 @@ from django.contrib import messages
 from django.contrib.auth import logout
 from QES.models import Questions,Answers
 from django.contrib.auth.models import User
+from users.models import Profile
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm,UserUpdateForm,ProfileUpdateForm
 
-def register(request):
+
+def register(request): #For registering as a new user
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
@@ -20,7 +22,7 @@ def register(request):
     return render(request,'signup.html',{'form': form})
 
 @login_required
-def profile(request):
+def profile(request): #Update Profile
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST,instance=request.user)
         p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
@@ -38,20 +40,18 @@ def profile(request):
     }
     return render(request,'profile.html', context)
 
-def logout_view(request):
-    logout(request)
+def logout_view(request): #Logout
     Questions.objects.all().update(downvoted='False')
     Answers.objects.all().update(downvoted='False')
-    rep = Questions.totalvotes + Answers.totalvotes
-    User.profile.reputation.update(reputation=rep)
-    return redirect('home')
-
-
-#Use this for sending messages after POST
-
-# message.debug
-# message.info
-# message.success
-# message.warning
-# message.error
+    userid = request.user.id
+    rep = 0
+    for quest in Questions.objects.all():
+        if quest.author_id == userid:
+            rep += quest.totalvotes
+    for answer in Answers.objects.all():
+        if answer.author_id == userid:
+            rep += quest.totalvotes
+    Profile.objects.filter(user_id=userid).update(reputation=rep)
+    logout(request)
+    return redirect('login')
 
